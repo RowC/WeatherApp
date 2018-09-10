@@ -7,8 +7,11 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -38,15 +41,18 @@ public class ForecastListAdapter extends RecyclerView.Adapter<ForecastListAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if(weatherInfoLists.get(position).getTempMax()==null){
-            Toast.makeText(context,"Sorry!",Toast.LENGTH_LONG).show();
-        }else {
+        if (weatherInfoLists.get(position).getTempMax() == null) {
+            Toast.makeText(context, "Sorry!", Toast.LENGTH_LONG).show();
+        } else {
             Weather weather = weatherInfoLists.get(position);
             holder.textViewTemp_FDay.setText(weather.getTempDays().toString());
-            holder.textViewTemp_minF.setText("Min: "+weather.getTempMax().toString() + " \u2103");
+            holder.textViewTemp_minF.setText("Min: " + weather.getTempMax().toString() + " \u2103");
 
             holder.textView_DateF.setText(weather.getTempDate().toString());
-            holder.textViewTemp_maxF.setText("Max: "+weather.getTempMin().toString() + " \u2103");
+            holder.textViewTemp_maxF.setText("Max: " + weather.getTempMin().toString() + " \u2103");
+
+           /* String iconUrl = "http://openweathermap.org/img/w/10d.png";
+            Picasso.with(context).load(iconUrl).into(holder.imgViewTemp_IconF);*/
         }
 
     }
@@ -58,11 +64,11 @@ public class ForecastListAdapter extends RecyclerView.Adapter<ForecastListAdapte
     }
 
 
-
     public class ViewHolder extends RecyclerView.ViewHolder {
 //        TextView textViewCity, textViewTemp, textViewTemp_min, textViewTemp_max, textViewDate;
 
-        TextView textViewTempF, textViewTemp_minF, textViewTemp_maxF, textView_DateF,textViewTemp_FDay;
+        TextView textViewTempF, textViewTemp_minF, textViewTemp_maxF, textView_DateF, textViewTemp_FDay;
+        ImageView imgViewTemp_IconF;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -72,14 +78,11 @@ public class ForecastListAdapter extends RecyclerView.Adapter<ForecastListAdapte
             textViewTemp_minF = itemView.findViewById(R.id.textViewTempMinF);
             textView_DateF = itemView.findViewById(R.id.textViewDateF);
             textViewTemp_maxF = itemView.findViewById(R.id.textViewTempMaxF);
+//            imgViewTemp_IconF = itemView.findViewById(R.id.imgViewTempIconF);
         }
 
 
     }
-
-
-
-
 
 
 }

@@ -30,7 +30,7 @@
 
             <LinearLayout
                 android:layout_width="180dp"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:orientation="vertical">
 
@@ -47,7 +47,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:hint="Date :-"
                     android:textColor="@color/colorWhite"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -79,8 +78,8 @@
                 android:orientation="vertical">
                 <ImageView
                     android:id="@+id/imgViewTempIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
                 <TextView
                     android:id="@+id/textViewTempDes"
@@ -160,6 +159,7 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
+                android:id="@+id/TempMinL"
                 android:gravity="center_horizontal"
                 android:layout_marginRight="10dp"
                 android:layout_width="115dp"
@@ -203,6 +203,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/TempMaxL"
                 android:layout_marginRight="10dp"
                 android:layout_width="115dp"
                 android:layout_height="wrap_content"
@@ -246,6 +247,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/TempHmL"
                 android:layout_width="115dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -253,11 +255,12 @@
                 <!--230dp
                 android:background="#668bb9"-->
                 <TextView
+                    android:id="@+id/textViewHum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
                     android:text="Humidity"
-                    android:textColor="@color/colorWhite"/>
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/textViewHumidity"
