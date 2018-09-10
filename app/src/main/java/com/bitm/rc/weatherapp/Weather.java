@@ -6,23 +6,25 @@ public class Weather {
     private String tempMin;
     private String tempMax;
     private String tempDate;
+    private String tempDays;
 
     public Weather() {
     }
 
-    public Weather(String temp, String tempMin, String tempMax, String tempDate) {
-        this.temp = temp;
+    public Weather(String tempMin, String tempMax, String tempDate,String tempDays) {
+
         this.tempMin = tempMin;
         this.tempMax = tempMax;
         this.tempDate = tempDate;
+        this.tempDays = tempDays;
     }
-    public Weather(String city, String temp, String tempMin, String tempMax, String tempDate) {
+    /*public Weather(String city, String temp, String tempMin, String tempMax, String tempDate) {
         this.city = city;
         this.temp = temp;
         this.tempMin = tempMin;
         this.tempMax = tempMax;
         this.tempDate = tempDate;
-    }
+    }*/
 
     public String getCity() {
         return city;
@@ -62,5 +64,13 @@ public class Weather {
 
     public void setTempDate(String tempDate) {
         this.tempDate = tempDate;
+    }
+
+    public String getTempDays() {
+        return tempDays;
+    }
+
+    public void setTempDays(String tempDays) {
+        this.tempDays = tempDays;
     }
 }

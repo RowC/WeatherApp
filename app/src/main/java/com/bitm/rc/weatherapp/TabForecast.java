@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,10 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -60,13 +64,29 @@ public class TabForecast  extends Fragment implements MaterialSearchBar.OnSearch
             textViewCity.setText(jsonObjectCity.getString("name"));
             for(int i=0;i<jsonArray.length();i++){
                 if(i%8==0){
+//                    JSONObject jsonObjectList = jsonArray.getJSONObject(i);
+//                    JSONObject jsonObject1 = jsonObjectList.getJSONObject("main");
+//                    String temp = jsonObject1.getString("temp").toString();
+//                    String minTemp = jsonObject1.getString("temp_min").toString();
+//                    String maxTemp = jsonObject1.getString("temp_max").toString();
+//                    String currentDate = jsonObjectList.get("dt_txt").toString();
+//                    Weather weather = new Weather(temp,minTemp,maxTemp,currentDate);
+//                    list.add(weather);
                     JSONObject jsonObjectList = jsonArray.getJSONObject(i);
                     JSONObject jsonObject1 = jsonObjectList.getJSONObject("main");
                     String temp = jsonObject1.getString("temp").toString();
                     String minTemp = jsonObject1.getString("temp_min").toString();
                     String maxTemp = jsonObject1.getString("temp_max").toString();
                     String currentDate = jsonObjectList.get("dt_txt").toString();
-                    Weather weather = new Weather(temp,minTemp,maxTemp,currentDate);
+
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date newDate = format.parse(currentDate);
+                    String dayOfTheWeek = (String) DateFormat.format("EEEE", newDate); // Thursday
+                    String day          = (String) DateFormat.format("dd",   newDate); // 20
+                    String monthString  = (String) DateFormat.format("MMM",  newDate); // Jun
+                    String year         = (String) DateFormat.format("yyyy", newDate); // 2013
+
+                    Weather weather = new Weather(minTemp,maxTemp,monthString+" "+day+", "+year,dayOfTheWeek);
                     list.add(weather);
                 }
             }
@@ -83,11 +103,12 @@ public class TabForecast  extends Fragment implements MaterialSearchBar.OnSearch
             String weatherDetails = weatherInfo.execute("https://api.openweathermap.org/data/2.5/forecast?q="+cityName+"&units=metric&APPID=1c476c4624d1f7efb6f54ed81e801e39").get();
             if(weatherDetails==null){
                 list.clear();
+                textViewError.setVisibility(View.VISIBLE);
                 textViewError.setText("Sorry City not found");
                 textViewCity.setText("");
                 Toast.makeText(this.getContext(),"Sorry ",Toast.LENGTH_LONG).show();
             }else {
-                textViewError.setText("");
+                textViewError.setVisibility(View.GONE);
                 JSONObject jsonObject = new JSONObject(weatherDetails);
                 JSONObject jsonObjectCity = jsonObject.getJSONObject("city");
                 JSONArray jsonArray = jsonObject.getJSONArray("list");
@@ -100,7 +121,16 @@ public class TabForecast  extends Fragment implements MaterialSearchBar.OnSearch
                         String minTemp = jsonObject1.getString("temp_min").toString();
                         String maxTemp = jsonObject1.getString("temp_max").toString();
                         String currentDate = jsonObjectList.get("dt_txt").toString();
-                        Weather weather = new Weather(temp,minTemp,maxTemp,currentDate);
+
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Date newDate = format.parse(currentDate);
+                        String dayOfTheWeek = (String) DateFormat.format("EEEE", newDate); // Thursday
+                        String day          = (String) DateFormat.format("dd",   newDate); // 20
+                        String monthString  = (String) DateFormat.format("MMM",  newDate); // Jun
+//                        String monthNumber  = (String) DateFormat.format("MM",   newDate); // 06
+                        String year         = (String) DateFormat.format("yyyy", newDate); // 2013
+
+                        Weather weather = new Weather(minTemp,maxTemp,monthString+" "+day+", "+year,dayOfTheWeek);
                         list.add(weather);
                     }
                 }
@@ -136,4 +166,6 @@ public class TabForecast  extends Fragment implements MaterialSearchBar.OnSearch
                 break;
         }
     }
+
+
 }

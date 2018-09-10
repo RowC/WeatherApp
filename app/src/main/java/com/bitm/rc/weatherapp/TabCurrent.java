@@ -2,23 +2,32 @@ package com.bitm.rc.weatherapp;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mancj.materialsearchbar.MaterialSearchBar;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class TabCurrent extends Fragment implements MaterialSearchBar.OnSearchActionListener {
-    TextView textViewCity, textViewTemp, textViewTemp_min, textViewTemp_max, textViewDate, textViewError;
+    TextView textViewCity, textViewTemp,textViewTempDes,textViewHumidity, textViewTemp_min, textViewTemp_max, textViewDate,textViewDay, textViewError;
+    ImageView imgViewTempIcon;
     MaterialSearchBar materialSearchBar;
     Button btnC, btnF;
 
+    private static DecimalFormat dcml = new DecimalFormat(".#");
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -26,9 +35,13 @@ public class TabCurrent extends Fragment implements MaterialSearchBar.OnSearchAc
         materialSearchBar = rootView.findViewById(R.id.search_bar_current);
         textViewCity = rootView.findViewById(R.id.textViewCity);
         textViewTemp = rootView.findViewById(R.id.textViewTemp);
+        textViewTempDes = rootView.findViewById(R.id.textViewTempDes);
+        textViewHumidity = rootView.findViewById(R.id.textViewHumidity);
+        imgViewTempIcon = rootView.findViewById(R.id.imgViewTempIcon);
         textViewTemp_min = rootView.findViewById(R.id.textViewTempMin);
         textViewTemp_max = rootView.findViewById(R.id.textViewTempMax);
         textViewDate = rootView.findViewById(R.id.textViewDate);
+        textViewDay = rootView.findViewById(R.id.textViewDay);
         textViewError = rootView.findViewById(R.id.textViewError);
         btnC = rootView.findViewById(R.id.btnC);
         btnF = rootView.findViewById(R.id.btnF);
@@ -61,9 +74,10 @@ public class TabCurrent extends Fragment implements MaterialSearchBar.OnSearchAc
                     Double tmpF = (((tmp * 9 / 5) + 32));
                     Double tmpMnF = (((tmpMn * 9 / 5) + 32));
                     Double tmpMxF = (((tmpMx * 9 / 5) + 32));
-                    textViewTemp.setText((tmpF) + " \u2109");
-                    textViewTemp_min.setText((tmpMnF) + " \u2109");
-                    textViewTemp_max.setText((tmpMxF) + " \u2109");
+
+                    textViewTemp.setText(dcml.format(tmpF) + " \u2109");
+                    textViewTemp_min.setText(dcml.format(tmpMnF) + " \u2109");
+                    textViewTemp_max.setText(dcml.format(tmpMxF) + " \u2109");
                 }
 
 
@@ -86,9 +100,9 @@ public class TabCurrent extends Fragment implements MaterialSearchBar.OnSearchAc
                     Double tmpC = (tmp - 32) * 5 / 9;
                     Double tmpMnC = (tmpMn - 32) * 5 / 9;
                     Double tmpMxC = (tmpMx - 32) * 5 / 9;
-                    textViewTemp.setText((tmpC) + " \u2103");
-                    textViewTemp_min.setText((tmpMnC) + " \u2103");
-                    textViewTemp_max.setText((tmpMxC) + " \u2103");
+                    textViewTemp.setText(dcml.format(tmpC) + " \u2103");
+                    textViewTemp_min.setText(dcml.format(tmpMnC) + " \u2103");
+                    textViewTemp_max.setText(dcml.format(tmpMxC) + " \u2103");
                 }
             }
         });
@@ -103,20 +117,40 @@ public class TabCurrent extends Fragment implements MaterialSearchBar.OnSearchAc
             JSONArray jsonArray = jsonObject.getJSONArray("list");
             JSONObject jsonObjectList = jsonArray.getJSONObject(0);
             JSONObject jsonObject1 = jsonObjectList.getJSONObject("main");
+            JSONArray jsonArrayWeather= jsonObjectList.getJSONArray("weather");
             String city = jsonObjectCity.getString("name").toString();
             String temp = jsonObject1.getString("temp").toString();
             String minTemp = jsonObject1.getString("temp_min").toString();
             String maxTemp = jsonObject1.getString("temp_max").toString();
+            String humidity = jsonObject1.getString("humidity").toString();
+
+            String weatherJson = jsonArrayWeather.getString(1);
+            String description = jsonArrayWeather.getString(2);
+            String icon = jsonArrayWeather.getString(3);
             String currentDate = jsonObjectList.get("dt_txt").toString();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date newDate = format.parse(currentDate);
+            String dayOfTheWeek = (String) DateFormat.format("EEEE", newDate); // Thursday
+            String day          = (String) DateFormat.format("dd",   newDate); // 20
+            String monthNumber  = (String) DateFormat.format("MM",   newDate); // 06
+            String year         = (String) DateFormat.format("yyyy", newDate); // 2013
             textViewCity.setText((city));
+            textViewDate.setText((day+"/"+monthNumber+"/"+year));
+            textViewDay.setText((dayOfTheWeek));
             textViewTemp.setText((temp) + " \u2103");
             textViewTemp_min.setText((minTemp) + " \u2103");
             textViewTemp_max.setText((maxTemp) + " \u2103");
-            textViewDate.setText((currentDate));
+            textViewHumidity.setText((humidity));
+            textViewTempDes.setText((weatherJson+"\n"+description));
+
+            String iconUrl = "http://openweathermap.org/img/w/" + icon + ".png";
+            Picasso.get().load(iconUrl).into(imgViewTempIcon);
         } catch (Exception e) {
 
         }
     }
+
+
 
     public void getCurrentWeather(String cityName) {
         WeatherInfo weatherInfo = new WeatherInfo();
@@ -130,26 +164,53 @@ public class TabCurrent extends Fragment implements MaterialSearchBar.OnSearchAc
                 textViewTemp_min.setText("");
                 textViewTemp_max.setText("");
                 textViewDate.setText("");
-                textViewError.setText("");
+                textViewDay.setText("");
+                btnC.setVisibility(View.GONE);
+                btnF.setVisibility(View.GONE);
+                textViewError.setVisibility(View.VISIBLE);
                 textViewError.setText("Sorry City not found");
                 Toast.makeText(this.getContext(), "Sorry ", Toast.LENGTH_LONG).show();
             } else {
+
+                btnC.setVisibility(View.VISIBLE);
+                btnF.setVisibility(View.VISIBLE);
+                textViewError.setVisibility(View.GONE);
                 JSONObject jsonObject = new JSONObject(weatherDetails);
                 JSONObject jsonObjectCity = jsonObject.getJSONObject("city");
                 JSONArray jsonArray = jsonObject.getJSONArray("list");
                 JSONObject jsonObjectList = jsonArray.getJSONObject(0);
                 JSONObject jsonObject1 = jsonObjectList.getJSONObject("main");
+                JSONObject jsonObjectWeather= jsonObjectList.getJSONObject("weather");
                 String city = jsonObjectCity.getString("name").toString();
                 String temp = jsonObject1.getString("temp").toString();
                 String minTemp = jsonObject1.getString("temp_min").toString();
                 String maxTemp = jsonObject1.getString("temp_max").toString();
+                String humidity = jsonObject1.getString("humidity").toString();
+                String description = jsonObjectWeather.getString("description").toString();
+                String icon = jsonObjectWeather.getString("icon").toString();
                 String currentDate = jsonObjectList.get("dt_txt").toString();
+
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date newDate = format.parse(currentDate);
+                String dayOfTheWeek = (String) DateFormat.format("EEEE", newDate); // Thursday
+                String day          = (String) DateFormat.format("dd",   newDate); // 20
+                String monthNumber  = (String) DateFormat.format("MM",   newDate); // 06
+                String year         = (String) DateFormat.format("yyyy", newDate); // 2013
                 textViewCity.setText((city));
+                textViewDate.setText((day+"/"+monthNumber+"/"+year));
+                textViewDay.setText((dayOfTheWeek));
                 textViewTemp.setText((temp) + " \u2103");
                 textViewTemp_min.setText((minTemp) + " \u2103");
                 textViewTemp_max.setText((maxTemp) + " \u2103");
-                textViewDate.setText((currentDate));
-                textViewError.setText("");
+                textViewHumidity.setText((humidity));
+                textViewTempDes.setText((description));
+                String iconUrl = "http://openweathermap.org/img/w/" + icon + ".png";
+                Picasso.get().load(iconUrl).into(imgViewTempIcon);
+               /* textViewCity.setText((city));
+                textViewTemp.setText((temp) + " \u2103");
+                textViewTemp_min.setText((minTemp) + " \u2103");
+                textViewTemp_max.setText((maxTemp) + " \u2103");
+                textViewDate.setText((currentDate));*/
             }
         } catch (Exception e) {
 
@@ -160,7 +221,7 @@ public class TabCurrent extends Fragment implements MaterialSearchBar.OnSearchAc
     @Override
     public void onSearchStateChanged(boolean b) {
         String state = b ? "enabled" : "disabled";
-        Toast.makeText(this.getContext(), "Search " + state, Toast.LENGTH_LONG).show();
+//        Toast.makeText(this.getContext(), "Search " + state, Toast.LENGTH_LONG).show();
     }
 
     @Override
