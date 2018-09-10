@@ -104,7 +104,7 @@ public class TabForecast  extends Fragment implements MaterialSearchBar.OnSearch
             if(weatherDetails==null){
                 list.clear();
                 textViewError.setVisibility(View.VISIBLE);
-                textViewError.setText("Sorry City not found");
+                textViewError.setText("Sorry City Not Found");
                 textViewCity.setText("");
                 Toast.makeText(this.getContext(),"Sorry ",Toast.LENGTH_LONG).show();
             }else {

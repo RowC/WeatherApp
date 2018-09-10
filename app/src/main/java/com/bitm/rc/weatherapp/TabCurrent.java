@@ -186,7 +186,7 @@ public class TabCurrent extends Fragment implements MaterialSearchBar.OnSearchAc
                 humL.setVisibility(View.GONE);
 
                 textViewError.setVisibility(View.VISIBLE);
-                textViewError.setText("Sorry City not found");
+                textViewError.setText("Sorry City Not Found");
                 Toast.makeText(this.getContext(), "Sorry ", Toast.LENGTH_LONG).show();
             } else {
 
