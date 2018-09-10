@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_current"
+        android:title="CURRENT" />
+    <item
+        android:id="@+id/nav_forecats"
+        android:title="5 DAYS FORECAST" />
+</menu>
