@@ -46,10 +46,10 @@ public class ForecastListAdapter extends RecyclerView.Adapter<ForecastListAdapte
         } else {
             Weather weather = weatherInfoLists.get(position);
             holder.textViewTemp_FDay.setText(weather.getTempDays().toString());
-            holder.textViewTemp_minF.setText("Min: " + weather.getTempMax().toString() + " \u2103");
+            holder.textViewTemp_minF.setText("Min: " + weather.getTempMin().toString() + " \u2103");
 
             holder.textView_DateF.setText(weather.getTempDate().toString());
-            holder.textViewTemp_maxF.setText("Max: " + weather.getTempMin().toString() + " \u2103");
+            holder.textViewTemp_maxF.setText("Max: " + weather.getTempMax().toString() + " \u2103");
 
            /* String iconUrl = "http://openweathermap.org/img/w/10d.png";
             Picasso.with(context).load(iconUrl).into(holder.imgViewTemp_IconF);*/

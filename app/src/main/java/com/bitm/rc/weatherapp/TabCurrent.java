@@ -30,7 +30,7 @@ public class TabCurrent extends Fragment implements MaterialSearchBar.OnSearchAc
     Button btnC, btnF;
     LinearLayout minL,maxL,humL;
 
-    private static DecimalFormat dcml = new DecimalFormat(".#");
+    private static DecimalFormat dcml = new DecimalFormat(".##");
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
