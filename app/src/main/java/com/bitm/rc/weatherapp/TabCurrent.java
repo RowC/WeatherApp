@@ -210,11 +210,14 @@ public class TabCurrent extends Fragment implements MaterialSearchBar.OnSearchAc
             textViewTemp_max.setText((maxTemp) + " \u2103");
             textViewHumidity.setText((humidity));
             textViewTempDes.setText((weatherJson + "\n" + description));
-
             String iconUrl = "http://openweathermap.org/img/w/" + icon + ".png";
+            File f = new File(iconUrl);
 //            String iconUrl = "http://openweathermap.org/img/w/10d.png";
 //            Picasso.with(getContext()).load(iconUrl).into(imgViewIcon);
-            Picasso.get().load(iconUrl).into(imgViewIcon);
+
+//            Picasso.with(getActivity()).load(f).into(imgViewIcon);
+
+            Picasso.get().load(f).into(imgViewIcon);
         } catch (Exception e) {
 
         }
@@ -293,13 +296,8 @@ public class TabCurrent extends Fragment implements MaterialSearchBar.OnSearchAc
                 textViewHumidity.setText((humidity));
                 textViewTempDes.setText((weatherJson + "\n" + description));
                 String iconUrl = "http://openweathermap.org/img/w/" + icon + ".png";
-//                Picasso.with(getContext()).load(iconUrl).into(imgViewIcon);
-                Picasso.get().load(iconUrl).into(imgViewIcon);
-               /* textViewCity.setText((city));
-                textViewTemp.setText((temp) + " \u2103");
-                textViewTemp_min.setText((minTemp) + " \u2103");
-                textViewTemp_max.setText((maxTemp) + " \u2103");
-                textViewDate.setText((currentDate));*/
+                File f = new File(iconUrl);
+                Picasso.get().load(f).into(imgViewIcon);
             }
         } catch (Exception e) {
 
