@@ -3,6 +3,7 @@ package com.bitm.rc.weatherapp;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -16,11 +17,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.florent37.materialimageloading.MaterialImageLoading;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.mancj.materialsearchbar.MaterialSearchBar;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -210,16 +213,29 @@ public class TabCurrent extends Fragment implements MaterialSearchBar.OnSearchAc
             textViewTemp_max.setText((maxTemp) + " \u2103");
             textViewHumidity.setText((humidity));
             textViewTempDes.setText((weatherJson + "\n" + description));
-            String iconUrl = "http://openweathermap.org/img/w/" + icon + ".png";
+            String iconUrl = "http://openweathermap.org/img/w/"+icon+".png";
             File f = new File(iconUrl);
-//            String iconUrl = "http://openweathermap.org/img/w/10d.png";
+            String iconUrl1 = "http://openweathermap.org/img/w/10d.png";
 //            Picasso.with(getContext()).load(iconUrl).into(imgViewIcon);
 
 //            Picasso.with(getActivity()).load(f).into(imgViewIcon);
 
-            Picasso.get().load(f).into(imgViewIcon);
-        } catch (Exception e) {
+            Picasso.get().load(f).fit().centerCrop().into(imgViewIcon, new Callback() {
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(getContext(),"Image  found ",Toast.LENGTH_LONG).show();
+                    MaterialImageLoading.animate(imgViewIcon).setDuration(2000).start();
+                }
 
+                @Override
+                public void onError(Exception e) {
+                    Toast.makeText(getContext(),"Sorry image not found "+e,Toast.LENGTH_LONG).show();
+                }
+            });
+
+        } catch (Exception e) {
+            Toast.makeText(getContext(),"Sorry "+e,Toast.LENGTH_LONG).show();
+           // Snackbar.make(getView(),"Sorry image not loading",Snackbar.LENGTH_LONG);
         }
     }
 
