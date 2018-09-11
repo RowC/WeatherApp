@@ -47,19 +47,7 @@ public class Main2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);/*
-
-        textViewCity=findViewById(R.id.textViewCity);
-        textViewTemp=findViewById(R.id.textViewTemp);
-        textViewTemp_min=findViewById(R.id.textViewTempMin);
-        textViewTemp_max=findViewById(R.id.textViewTempMax);
-        textViewDate=findViewById(R.id.textViewDate);
-
-//        textViewTempF=findViewById(R.id.textViewTempF);
-        textViewTemp_minF=findViewById(R.id.textViewTempMinF);
-        textViewTemp_maxF=findViewById(R.id.textViewTempMaxF);
-        textViewDateF=findViewById(R.id.textViewDateF);*/
-
+        setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
